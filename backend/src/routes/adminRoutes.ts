@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
     adminLogin,
     adminRegister,
+    getAdminStatus,
     getDashboardStats,
     getAdminProperties,
     getAdminPayments,
@@ -14,6 +15,7 @@ import { loginSchema, registerSchema } from '../utils/validators';
 const router = Router();
 
 // Public (seed, login & register)
+router.get('/status', getAdminStatus);
 router.post('/seed', seedAdmin);
 router.post('/login', validate(loginSchema), adminLogin);
 router.post('/register', validate(registerSchema), adminRegister);
