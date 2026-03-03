@@ -1,16 +1,16 @@
-'use client';
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, Mail, Loader2, ShieldCheck, ArrowRight, User, Phone, Key } from 'lucide-react';
+import { Lock, Mail, Loader2, ShieldCheck, ArrowRight, User, Phone, Key, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { adminLogin, adminRegister } from '@/lib/api';
+import { adminLogin, adminRegister, getAdminStatus } from '@/lib/api';
 
 export default function AdminPortal() {
     const router = useRouter();
     const [isRegister, setIsRegister] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(true); // Default to true while checking
+    const [checkingStatus, setCheckingStatus] = useState(true);
 
     // Form states
     const [formData, setFormData] = useState({
@@ -20,6 +20,22 @@ export default function AdminPortal() {
         password: '',
         inviteCode: ''
     });
+
+    useEffect(() => {
+        const checkStatus = async () => {
+            try {
+                const { initialized } = await getAdminStatus();
+                setIsInitialized(initialized);
+                // If not initialized, automatically show registration
+                if (!initialized) setIsRegister(true);
+            } catch (error) {
+                console.error('Failed to check admin status');
+            } finally {
+                setCheckingStatus(false);
+            }
+        };
+        checkStatus();
+    }, []);
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,7 +48,8 @@ export default function AdminPortal() {
         try {
             if (isRegister) {
                 await adminRegister(formData);
-                toast.success('Account created! You can now log in.');
+                toast.success('Admin account created! Access granted.');
+                setIsInitialized(true);
                 setIsRegister(false);
             } else {
                 const response = await adminLogin({ email: formData.email, password: formData.password });
@@ -48,6 +65,14 @@ export default function AdminPortal() {
         }
     };
 
+    if (checkingStatus) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-950">
+                <Loader2 className="w-10 h-10 text-teal-500 animate-spin" />
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
             {/* Background Vibe */}
@@ -61,13 +86,13 @@ export default function AdminPortal() {
             >
                 <div className="text-center mb-8">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-xl shadow-teal-500/20">
-                        {isRegister ? '+' : 'A'}
+                        {isRegister ? <Sparkles className="w-8 h-8" /> : 'A'}
                     </div>
                     <h1 className="text-3xl font-black text-white mb-2 tracking-tight">
-                        {isRegister ? 'New Account' : 'Admin Login'}
+                        {isRegister ? 'Initial Setup' : 'Admin Login'}
                     </h1>
                     <p className="text-slate-500 text-sm">
-                        {isRegister ? 'Join the AssetHub management team' : 'Secure access for authorized staff'}
+                        {isRegister ? 'Configure your single administrator account' : 'Authorized administrator access only'}
                     </p>
                 </div>
 
@@ -154,7 +179,7 @@ export default function AdminPortal() {
                                 <Loader2 className="w-5 h-5 animate-spin" />
                             ) : (
                                 <>
-                                    {isRegister ? 'Create Account' : 'Authenticate Access'}
+                                    {isRegister ? 'Publish Administrator' : 'Sign in to Dashboard'}
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </>
                             )}
@@ -162,18 +187,17 @@ export default function AdminPortal() {
                     </div>
                 </form>
 
-                <div className="mt-8 text-center text-sm font-bold">
-                    <button
-                        onClick={() => setIsRegister(!isRegister)}
-                        className="text-slate-500 hover:text-white transition-colors"
-                    >
-                        {isRegister ? "Already have an account? Sign In" : "Need an account? Request Invite"}
-                    </button>
-                </div>
+                {!isInitialized && (
+                    <div className="mt-6 p-4 rounded-xl bg-teal-500/5 border border-teal-500/20">
+                        <p className="text-[10px] text-teal-400 font-bold uppercase text-center leading-relaxed">
+                            System not yet initialized. <br /> Create the master account to proceed.
+                        </p>
+                    </div>
+                )}
 
-                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-center gap-3 opacity-40">
+                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-center gap-3 opacity-40 uppercase tracking-[0.2em]">
                     <ShieldCheck className="w-5 h-5 text-teal-400" />
-                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Enterprise Guard Active</span>
+                    <span className="text-[10px] text-slate-500 font-black">Single Node Security</span>
                 </div>
             </motion.div>
         </div>
