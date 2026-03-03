@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AssetHub | Premium Kenyan Asset Marketplace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
@@ -37,10 +40,33 @@
         }
 
         /* --- Animations --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px var(--primary-glow); } 50% { box-shadow: 0 0 40px var(--primary-glow); } }
-        
-        .animate-fade { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px var(--primary-glow);
+            }
+
+            50% {
+                box-shadow: 0 0 40px var(--primary-glow);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.6s ease forwards;
+        }
 
         /* --- Layout --- */
         .container {
@@ -107,7 +133,8 @@
             transition: color 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--primary);
         }
 
@@ -509,7 +536,11 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         /* --- Property Details --- */
         .property-details-grid {
@@ -542,7 +573,7 @@
 
         .features-grid {
             display: grid;
-            grid-cols: 2;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin: 40px 0;
         }
@@ -558,13 +589,25 @@
 
         /* --- Responsive --- */
         @media (max-width: 900px) {
-            .hero h1 { font-size: 3rem; }
-            .property-details-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .nav-links { display: none; }
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .property-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Header -->
@@ -577,13 +620,14 @@
                 </a>
                 <ul class="nav-links">
                     <li><a href="#" class="active" onclick="showPage('home')">Home</a></li>
-                    <li><a href="#" onclick="showPage('listings')">Listings</a></li>
+                    <li><a href="#" onclick="showPage('listings')">Marketplace</a></li>
                     <li><a href="#">Categories</a></li>
-                    <li><a href="#" onclick="showPage('admin')">Admin Portal</a></li>
+                    <li><a href="#" onclick="showPage('admin')" style="color: var(--accent);">Admin Access</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <button class="btn btn-outline" onclick="showPage('listings')">Browse</button>
-                    <button class="btn btn-primary" onclick="showPage('admin')">Sign In</button>
+                    <button class="btn btn-outline" onclick="showPage('listings')">Browse Assets</button>
+                    <button class="btn btn-primary" onclick="showPage('admin')"><i data-lucide="shield-check"></i> Admin
+                        Portal</button>
                 </div>
             </nav>
         </div>
@@ -596,7 +640,7 @@
             <div class="container animate-fade">
                 <h1 id="hero-title">Discover Premium Assets <br> in the Heart of Kenya</h1>
                 <p>Reliable properties, verified vehicles, and seamless M-Pesa bookings. All in one place.</p>
-                
+
                 <div class="search-container">
                     <div class="search-input-group">
                         <i data-lucide="search" style="color: var(--text-dim);"></i>
@@ -609,13 +653,23 @@
                         <option>Car</option>
                         <option>Truck</option>
                     </select>
-                    <button class="btn btn-primary" onclick="performSearch()">Search Now</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="performSearch()">Search</button>
+                        <button class="btn btn-outline" onclick="showPage('admin')"
+                            style="border-color: var(--primary); color: var(--primary);">
+                            <i data-lucide="shield-lock"></i> Admin
+                        </button>
+                    </div>
                 </div>
 
-                <div style="margin-top: 40px; display: flex; justify-content: center; gap: 30px; color: var(--text-dim); font-size: 0.9rem;">
-                    <div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="check-circle" style="color: var(--primary); width: 18px;"></i> Verified Sellers</div>
-                    <div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="check-circle" style="color: var(--primary); width: 18px;"></i> Secure M-Pesa</div>
-                    <div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="check-circle" style="color: var(--primary); width: 18px;"></i> Real-time Monitoring</div>
+                <div
+                    style="margin-top: 40px; display: flex; justify-content: center; gap: 30px; color: var(--text-dim); font-size: 0.9rem;">
+                    <div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="check-circle"
+                            style="color: var(--primary); width: 18px;"></i> Verified Sellers</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="check-circle"
+                            style="color: var(--primary); width: 18px;"></i> Secure M-Pesa</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="check-circle"
+                            style="color: var(--primary); width: 18px;"></i> Real-time Monitoring</div>
                 </div>
             </div>
         </section>
@@ -624,25 +678,29 @@
             <div class="container">
                 <h2 class="section-title">Explore Categories</h2>
                 <p class="section-subtitle">Browse through our curated collection of verified high-value assets.</p>
-                
+
                 <div class="category-grid">
                     <div class="category-card" onclick="filterByCategory('Land')">
-                        <div class="category-icon" style="background: linear-gradient(135deg, #059669, #10b981)"><i data-lucide="map"></i></div>
+                        <div class="category-icon" style="background: linear-gradient(135deg, #059669, #10b981)"><i
+                                data-lucide="map"></i></div>
                         <h3>Prime Land</h3>
                         <p>Residential & Agricultural</p>
                     </div>
                     <div class="category-card" onclick="filterByCategory('House')">
-                        <div class="category-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6)"><i data-lucide="home"></i></div>
+                        <div class="category-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6)"><i
+                                data-lucide="home"></i></div>
                         <h3>Modern Houses</h3>
                         <p>Apartments & Villas</p>
                     </div>
                     <div class="category-card" onclick="filterByCategory('Car')">
-                        <div class="category-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b)"><i data-lucide="car"></i></div>
+                        <div class="category-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b)"><i
+                                data-lucide="car"></i></div>
                         <h3>Certified Cars</h3>
                         <p>Low mileage imports</p>
                     </div>
                     <div class="category-card" onclick="filterByCategory('Truck')">
-                        <div class="category-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1)"><i data-lucide="truck"></i></div>
+                        <div class="category-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1)"><i
+                                data-lucide="truck"></i></div>
                         <h3>Industrial Trucks</h3>
                         <p>Logistics & Haulage</p>
                     </div>
@@ -657,9 +715,10 @@
                         <h2 class="section-title">Featured Listings</h2>
                         <p class="section-subtitle" style="margin-bottom: 0;">Highly anticipated listings this week.</p>
                     </div>
-                    <button class="btn btn-outline" onclick="showPage('listings')">View All <i data-lucide="arrow-right"></i></button>
+                    <button class="btn btn-outline" onclick="showPage('listings')">View All <i
+                            data-lucide="arrow-right"></i></button>
                 </div>
-                
+
                 <div class="property-grid" id="featured-grid">
                     <!-- Cards injected by JS -->
                 </div>
@@ -673,13 +732,13 @@
             <div class="container">
                 <h1 class="section-title">All Property Listings</h1>
                 <p class="section-subtitle">Browse our entire inventory of verified assets across Kenya.</p>
-                
+
                 <div style="display: grid; grid-template-columns: 280px 1fr; gap: 40px; margin-top: 40px;">
                     <!-- Sidebar Filters -->
                     <div class="sidebar">
                         <div class="glass-card" style="padding: 30px; position: sticky; top: 120px;">
                             <h3 class="footer-title">Refine Search</h3>
-                            
+
                             <div class="input-group">
                                 <label>Category</label>
                                 <select class="btn btn-outline" style="width: 100%; text-align: left;" id="sidebar-cat">
@@ -693,11 +752,14 @@
 
                             <div class="input-group">
                                 <label>Price Range (KES)</label>
-                                <input type="number" placeholder="Min" style="width: 100%; margin-bottom: 10px; border-radius: 12px; background: rgba(0,0,0,0.2);">
-                                <input type="number" placeholder="Max" style="width: 100%; border-radius: 12px; background: rgba(0,0,0,0.2);">
+                                <input type="number" placeholder="Min"
+                                    style="width: 100%; margin-bottom: 10px; border-radius: 12px; background: rgba(0,0,0,0.2);">
+                                <input type="number" placeholder="Max"
+                                    style="width: 100%; border-radius: 12px; background: rgba(0,0,0,0.2);">
                             </div>
 
-                            <button class="btn btn-primary" style="width: 100%;" onclick="performSidebarFilter()">Apply Filters</button>
+                            <button class="btn btn-primary" style="width: 100%;" onclick="performSidebarFilter()">Apply
+                                Filters</button>
                         </div>
                     </div>
 
@@ -724,10 +786,11 @@
         <section style="padding-top: 140px;">
             <div class="container">
                 <div class="glass-card" style="max-width: 500px; margin: 0 auto; padding: 50px; text-align: center;">
-                    <div class="logo-icon" style="margin: 0 auto 30px; width: 60px; height: 60px;"><i data-lucide="shield-check"></i></div>
+                    <div class="logo-icon" style="margin: 0 auto 30px; width: 60px; height: 60px;"><i
+                            data-lucide="shield-check"></i></div>
                     <h2 class="section-title">Admin Portal</h2>
                     <p class="section-subtitle">Secure access for verified administrators only.</p>
-                    
+
                     <form onsubmit="handleLogin(event)" style="text-align: left; margin-top: 40px;">
                         <div class="input-group">
                             <label>Email Address</label>
@@ -737,7 +800,8 @@
                             <label>Security Key</label>
                             <input type="password" placeholder="••••••••" id="admin-password" required>
                         </div>
-                        <button class="btn btn-primary" type="submit" style="width: 100%; padding: 18px;">Authenticate Access</button>
+                        <button class="btn btn-primary" type="submit" style="width: 100%; padding: 18px;">Authenticate
+                            Access</button>
                     </form>
                 </div>
             </div>
@@ -753,7 +817,8 @@
                         <div class="logo-icon"><i data-lucide="package"></i></div>
                         AssetHub
                     </a>
-                    <p>Kenya's leading high-fidelity asset marketplace. We bridge the gap between verified owners and serious buyers with modern fintech solutions.</p>
+                    <p>Kenya's leading high-fidelity asset marketplace. We bridge the gap between verified owners and
+                        serious buyers with modern fintech solutions.</p>
                     <div style="display: flex; gap: 15px;">
                         <button class="btn btn-outline" style="padding: 10px;"><i data-lucide="twitter"></i></button>
                         <button class="btn btn-outline" style="padding: 10px;"><i data-lucide="instagram"></i></button>
@@ -763,10 +828,10 @@
                 <div>
                     <h4 class="footer-title">Platform</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Listings</a></li>
-                        <li><a href="#">Features</a></li>
-                        <li><a href="#">How it works</a></li>
-                        <li><a href="#">Careers</a></li>
+                        <li><a href="#" onclick="showPage('listings')">All Listings</a></li>
+                        <li><a href="#">Market Trends</a></li>
+                        <li><a href="#" onclick="showPage('admin')">Admin Login</a></li>
+                        <li><a href="#">Join as Agent</a></li>
                     </ul>
                 </div>
                 <div>
@@ -787,7 +852,8 @@
                     </ul>
                 </div>
             </div>
-            <div style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--card-border); text-align: center; color: var(--text-dim); font-size: 0.8rem;">
+            <div
+                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--card-border); text-align: center; color: var(--text-dim); font-size: 0.8rem;">
                 © 2026 AssetHub Marketplace Ltd. All rights reserved. Registered in Nairobi, Kenya.
             </div>
         </div>
@@ -796,21 +862,26 @@
     <!-- Payment Modal -->
     <div class="modal-overlay" id="payment-modal">
         <div class="modal">
-            <button onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-dim); cursor: pointer;"><i data-lucide="x"></i></button>
+            <button onclick="closeModal()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-dim); cursor: pointer;"><i
+                    data-lucide="x"></i></button>
             <div id="modal-form-view">
                 <div class="modal-header">
                     <div class="mpesa-logo">M-PESA</div>
                     <h3 style="font-weight: 800; margin-bottom: 5px;">Unlock Seller Details</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem;">Processing Commitment Fee: <span id="modal-amount" style="color: var(--primary); font-weight: 800;">KES 1,000</span></p>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Processing Commitment Fee: <span
+                            id="modal-amount" style="color: var(--primary); font-weight: 800;">KES 1,000</span></p>
                 </div>
                 <div class="input-group">
                     <label>M-Pesa Phone Number</label>
                     <input type="tel" placeholder="254 7XX XXX XXX" id="mpesa-phone">
                 </div>
-                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 25px;">Ensure your phone is unlocked. You will receive an STK push to enter your PIN.</p>
-                <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="triggerStkPush()">Initiate Booking</button>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 25px;">Ensure your phone is
+                    unlocked. You will receive an STK push to enter your PIN.</p>
+                <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="triggerStkPush()">Initiate
+                    Booking</button>
             </div>
-            
+
             <div id="modal-loading-view" class="processing-payment">
                 <div class="loader"></div>
                 <h3 style="font-weight: 800;">Waiting for Validation...</h3>
@@ -818,14 +889,20 @@
             </div>
 
             <div id="modal-success-view" class="processing-payment">
-                <div class="logo-icon" style="background: var(--primary); margin: 0 auto 20px; width: 60px; height: 60px;"><i data-lucide="check"></i></div>
+                <div class="logo-icon"
+                    style="background: var(--primary); margin: 0 auto 20px; width: 60px; height: 60px;"><i
+                        data-lucide="check"></i></div>
                 <h3 style="font-weight: 800; color: #4ade80;">Payment Verified!</h3>
                 <p style="color: var(--text-dim); margin: 15px 0;">Seller contact details have been unlocked.</p>
                 <div class="glass-card" style="padding: 20px; text-align: left; background: rgba(0,0,0,0.3);">
-                    <p style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; margin-bottom: 5px;">Contact Person</p>
-                    <p id="seller-phone" style="font-size: 1.25rem; font-weight: 900; letter-spacing: 1px;">+254 712 345 678</p>
+                    <p
+                        style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; margin-bottom: 5px;">
+                        Contact Person</p>
+                    <p id="seller-phone" style="font-size: 1.25rem; font-weight: 900; letter-spacing: 1px;">+254 712 345
+                        678</p>
                 </div>
-                <button class="btn btn-outline" style="width: 100%; margin-top: 25px;" onclick="closeModal()">Close & Continue</button>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 25px;" onclick="closeModal()">Close &
+                    Continue</button>
             </div>
         </div>
     </div>
@@ -865,10 +942,10 @@
         function renderGrids() {
             const featuredGrid = document.getElementById('featured-grid');
             const mainGrid = document.getElementById('main-listings-grid');
-            
+
             if (featuredGrid) featuredGrid.innerHTML = allProperties.slice(0, 3).map(p => renderCard(p)).join('');
             if (mainGrid) mainGrid.innerHTML = allProperties.map(p => renderCard(p)).join('');
-            
+
             lucide.createIcons();
         }
 
@@ -896,7 +973,7 @@
             const property = allProperties.find(p => p.id === id);
             if (!property) return;
             activeProperty = property;
-            
+
             const container = document.getElementById('details-container');
             container.innerHTML = `
                 <button class="btn btn-outline" onclick="showPage('listings')" style="margin-bottom: 30px;"><i data-lucide="arrow-left"></i> Back to listings</button>
@@ -963,12 +1040,12 @@
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId + '-page').classList.add('active');
-            
+
             // Update nav active link
             document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
             const activeLink = Array.from(document.querySelectorAll('.nav-links a')).find(a => a.textContent.toLowerCase() === pageId);
             if (activeLink) activeLink.classList.add('active');
-            
+
             window.scrollTo(0, 0);
         }
 
@@ -998,10 +1075,10 @@
                 alert('Please enter your M-Pesa phone number.');
                 return;
             }
-            
+
             document.getElementById('modal-form-view').style.display = 'none';
             document.getElementById('modal-loading-view').classList.add('active');
-            
+
             // Simulate STK Push verification
             setTimeout(() => {
                 document.getElementById('modal-loading-view').classList.remove('active');
@@ -1013,7 +1090,7 @@
         function performSearch() {
             const query = document.getElementById('main-search').value.toLowerCase();
             const filtered = allProperties.filter(p => p.title.toLowerCase().includes(query) || p.town.toLowerCase().includes(query));
-            
+
             const mainGrid = document.getElementById('main-listings-grid');
             mainGrid.innerHTML = filtered.map(p => renderCard(p)).join('');
             showPage('listings');
@@ -1042,7 +1119,12 @@
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('admin-email').value;
-            alert(`Authentication Request Sent for ${email}. Please check your hardware security key.`);
+            alert(`🔍 VALIDATING MASTER ACCOUNT: ${email}
+            
+Access Requesting... 
+Redirecting to secure local node at: http://localhost:3000/admin
+
+Note: This standalone demo simulates the entry point. The real single-admin setup logic is active on the Next.js port.`);
         }
 
         // Start Up
@@ -1050,4 +1132,5 @@
 
     </script>
 </body>
+
 </html>
