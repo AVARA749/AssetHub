@@ -19,7 +19,8 @@ import {
     Image as ImageIcon,
     CheckCircle2,
     Lock,
-    Smartphone
+    Smartphone,
+    Activity
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { createProperty, getPropertyById, updateProperty } from '@/lib/api';
