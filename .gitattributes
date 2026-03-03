@@ -1,0 +1,20 @@
+# Enforce LF for all text files (to prevent cross-platform diff noise)
+* text=auto eol=lf
+
+# Explicitly identify certain file types
+*.ts text
+*.tsx text
+*.js text
+*.json text
+*.css text
+*.html text
+*.md text
+*.ps1 text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
