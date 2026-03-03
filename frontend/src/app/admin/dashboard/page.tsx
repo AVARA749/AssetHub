@@ -9,12 +9,11 @@ import {
     PlusCircle,
     TrendingUp,
     Eye,
-    Calendar,
-    Clock,
     ArrowUpRight,
     Activity,
     CheckCircle2,
     XCircle,
+    Settings,
     LucideIcon
 } from 'lucide-react';
 import { getDashboardStats } from '@/lib/api';
