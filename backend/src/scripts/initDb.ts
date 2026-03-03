@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { Client } from 'pg';
 import { pool } from '../config/db';
 import dotenv from 'dotenv';
 
@@ -9,13 +10,30 @@ const initDb = async () => {
     try {
         console.log('🔄 Initializing AssetHub Database Synchronization...');
 
-        // Read the SQL file
+        const dbName = process.env.DB_NAME || 'assethub';
+
+        // 1. First, connect to 'postgres' to ensure the target DB exists
+        const client = new Client({
+            user: process.env.DB_USER,
+            host: process.env.DB_HOST,
+            password: process.env.DB_PASSWORD,
+            port: parseInt(process.env.DB_PORT || '5432'),
+            database: 'postgres'
+        });
+
+        await client.connect();
+        const checkDb = await client.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName]);
+
+        if (checkDb.rowCount === 0) {
+            console.log(`🏗️ Creating missing database: ${dbName}...`);
+            await client.query(`CREATE DATABASE ${dbName}`);
+        }
+        await client.end();
+
+        // 2. Now run the schema on the target pool
         const sqlPath = path.join(__dirname, '../../scripts/setup_db.sql');
         const sql = fs.readFileSync(sqlPath, 'utf8');
 
-        // Split by semicolon to execute multiple statements if needed, 
-        // though pool.query can often handle multiple statements depending on config.
-        // For robustness with the pg driver, we'll execute the whole block.
         await pool.query(sql);
 
         console.log('✅ Database Schema & Initial Seed Synchronized Successfully!');
