@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { query } from '../config/db';
-import { uploadToCloudinary } from '../services/cloudinary';
 import { AuthRequest } from '../middleware/auth';
 
 // GET /api/properties - Public listing with filters
@@ -182,19 +181,17 @@ export const createProperty = async (req: AuthRequest, res: Response) => {
             [title, description, category, listing_type, county, town, area, price, viewing_fee || 0, contact_phone, whatsapp_number || null, status || 'available']
         );
 
-        // Handle file uploads if present
+        // Handle file uploads if present (Local Storage)
         if (req.files && Array.isArray(req.files)) {
             const propertyId = result.rows[0].id;
             for (const file of req.files) {
                 const isVideo = file.mimetype.startsWith('video/');
-                const cloudResult = await uploadToCloudinary(
-                    file.buffer,
-                    `assethub/${propertyId}`,
-                    isVideo ? 'video' : 'image'
-                );
+                // File is already saved to disk by multer, just save the path to DB
+                const fileUrl = `/uploads/${file.filename}`;
+
                 await query(
                     'INSERT INTO media (property_id, file_url, file_type) VALUES ($1, $2, $3)',
-                    [propertyId, cloudResult.url, isVideo ? 'video' : 'image']
+                    [propertyId, fileUrl, isVideo ? 'video' : 'image']
                 );
             }
         }
@@ -253,18 +250,15 @@ export const updateProperty = async (req: AuthRequest, res: Response) => {
             values
         );
 
-        // Handle new file uploads
+        // Handle new file uploads (Local Storage)
         if (req.files && Array.isArray(req.files)) {
             for (const file of req.files) {
                 const isVideo = file.mimetype.startsWith('video/');
-                const cloudResult = await uploadToCloudinary(
-                    file.buffer,
-                    `assethub/${id}`,
-                    isVideo ? 'video' : 'image'
-                );
+                const fileUrl = `/uploads/${file.filename}`;
+
                 await query(
                     'INSERT INTO media (property_id, file_url, file_type) VALUES ($1, $2, $3)',
-                    [id, cloudResult.url, isVideo ? 'video' : 'image']
+                    [id, fileUrl, isVideo ? 'video' : 'image']
                 );
             }
         }
