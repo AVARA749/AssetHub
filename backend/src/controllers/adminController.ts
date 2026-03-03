@@ -4,6 +4,16 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthRequest } from '../middleware/auth';
 
+// GET /api/admin/status - Check if admin is initialized
+export const getAdminStatus = async (req: Request, res: Response) => {
+    try {
+        const result = await query("SELECT id FROM users WHERE role = 'admin' LIMIT 1");
+        res.json({ initialized: result.rows.length > 0 });
+    } catch (error) {
+        res.status(500).json({ message: 'Error checking admin status' });
+    }
+};
+
 // POST /api/admin/login
 export const adminLogin = async (req: Request, res: Response) => {
     try {
@@ -197,7 +207,13 @@ export const adminRegister = async (req: Request, res: Response) => {
             return res.status(403).json({ message: 'Invalid registration invite code' });
         }
 
-        // Check exists
+        // ONE ADMIN RULE: Check if ANY admin already exists
+        const adminCheck = await query("SELECT id FROM users WHERE role = 'admin'");
+        if (adminCheck.rows.length > 0) {
+            return res.status(403).json({ message: 'Admin setup is already complete. Only one administrator is allowed.' });
+        }
+
+        // Check exists by email/phone
         const existing = await query('SELECT * FROM users WHERE email = $1 OR phone = $2', [email, phone]);
         if (existing.rows.length > 0) {
             return res.status(409).json({ message: 'User with this email or phone already exists' });
