@@ -42,6 +42,8 @@ export const verifyPayment = (propertyId: string, phone: string) =>
     fetchAPI(`/mpesa/verify/${propertyId}/${phone}`);
 
 // Admin
+export const getAdminStatus = () => fetchAPI('/admin/status');
+
 export const adminLogin = (data: { email: string; password: string }) =>
     fetchAPI('/admin/login', { method: 'POST', body: JSON.stringify(data) });
 
