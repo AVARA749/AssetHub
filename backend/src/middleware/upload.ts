@@ -1,7 +1,22 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 
-const storage = multer.memoryStorage();
+// Ensure upload directory exists
+const uploadDir = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
 
 const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
@@ -11,7 +26,7 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCa
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error(`Invalid file type: ${file.mimetype}. Only images (JPEG, PNG, WebP, GIF) and videos (MP4, MPEG, MOV, AVI) are allowed.`));
+        cb(new Error(`Invalid file type: ${file.mimetype}. Only images and videos are allowed.`));
     }
 };
 
@@ -19,7 +34,7 @@ export const upload = multer({
     storage,
     fileFilter,
     limits: {
-        fileSize: 50 * 1024 * 1024, // 50MB max per file
-        files: 10, // Max 10 files at once
+        fileSize: 100 * 1024 * 1024, // Increased to 100MB for video support
+        files: 10,
     },
 });
